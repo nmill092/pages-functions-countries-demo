@@ -1,0 +1,107 @@
+body {
+  font-family: 'Inter', 'system-ui', sans-serif;
+  box-sizing: border-box;
+}
+
+.countries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.country {
+  flex: 1 0 max(23%, 100px);
+  font-size: 1rem;
+  color: white;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 1px solid gainsboro;
+  box-shadow: .2rem .2rem 1rem whitesmoke;
+}
+
+.country h2 {
+  font-size: 1.2rem;
+}
+
+.country:nth-child(even) {
+  background-image: linear-gradient(-60deg, color-mix(in oklab, royalblue, white 0%) 20%, color-mix(in oklab, royalblue, white 10%));
+}
+
+.country:nth-child(odd) {
+  background-image: linear-gradient(60deg, color-mix(in oklab, royalblue, white 0%) 10%, color-mix(in oklab, royalblue, white 20%));
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  height: 100vh;
+  color: white;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(5px);
+}
+
+.loading a:visited {
+  color: goldenrod;
+}
+
+.option-button {
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid crimson;
+  background-color: transparent;
+  color: crimson;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.option-button:hover {
+  background-color: crimson;
+  color: white;
+  border: 1px solid transparent;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.instructions {
+  font-size: 1.2rem; 
+  text-align: center;
+}
+
+.search-box {
+  width: 400px;
+  gap: 1rem;
+  caret-color: royalblue;
+  border: 1px solid royalblue;
+  border-radius: 5px;
+  outline: 2px solid transparent;
+  transition: .3s ease all;
+}
+
+.search-box:focus {
+  border: 1px solid transparent; 
+  outline: 2px solid crimson;
+  box-shadow: 0 0 5px crimson;
+}
+
+.error {
+  font-weight: bold;
+  font-size: 1.6rem; 
+  text-align: center; 
+  color: transparent; 
+  background: linear-gradient(60deg, salmon, red, salmon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin-block: 1rem; 
+  margin-inline: auto;
+}
