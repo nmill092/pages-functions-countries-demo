@@ -30,7 +30,7 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
 
   const {
-    data, isLoading, isFetching, isRefetching, isError,
+    data, isLoading, isFetching, isError,
   } = useQuery({
     queryKey: [endpoint],
     queryFn: () => fetchData(endpoint),
@@ -75,7 +75,7 @@ function App() {
         <SearchBox ref={searchValueRef} onChange={handleChange} placeholder={`Search for a country${endpoint === 'capitals' ? ' or capital' : '...'}`} />
       </div>
 
-      {(isLoading || isFetching || isRefetching) && (
+      {(isLoading || isFetching) && (
         <Loading>
           getting
           <a target="_blank" href={`/api/${endpoint}`} rel="noreferrer">
