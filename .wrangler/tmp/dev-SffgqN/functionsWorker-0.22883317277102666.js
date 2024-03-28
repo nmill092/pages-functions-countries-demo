@@ -1,4 +1,4 @@
-// ../.wrangler/tmp/bundle-n3or3J/checked-fetch.js
+// .wrangler/tmp/bundle-2c3SRu/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -23,7 +23,30 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
   }
 });
 
-// api/capitals.ts
+// .wrangler/tmp/pages-he8X1x/functionsWorker-0.22883317277102666.mjs
+var urls2 = /* @__PURE__ */ new Set();
+function checkURL2(request, init) {
+  const url = request instanceof URL ? request : new URL(
+    (typeof request === "string" ? new Request(request, init) : request).url
+  );
+  if (url.port && url.port !== "443" && url.protocol === "https:") {
+    if (!urls2.has(url.toString())) {
+      urls2.add(url.toString());
+      console.warn(
+        `WARNING: known issue with \`fetch()\` requests to custom HTTPS ports in published Workers:
+ - ${url.toString()} - the custom port will be ignored when the Worker is published using the \`wrangler deploy\` command.
+`
+      );
+    }
+  }
+}
+globalThis.fetch = new Proxy(globalThis.fetch, {
+  apply(target, thisArg, argArray) {
+    const [request, init] = argArray;
+    checkURL2(request, init);
+    return Reflect.apply(target, thisArg, argArray);
+  }
+});
 async function onRequestGet({ env }) {
   const { API_ENDPOINT: url } = env;
   const res = await fetch(url);
@@ -31,8 +54,6 @@ async function onRequestGet({ env }) {
   const capitals = countries.map(({ name, capital, id }) => ({ name, capital, id }));
   return new Response(JSON.stringify(capitals));
 }
-
-// api/populations.ts
 async function onRequestGet2({ env }) {
   const { API_ENDPOINT: url } = env;
   const res = await fetch(url);
@@ -40,8 +61,6 @@ async function onRequestGet2({ env }) {
   const populations = countries.map(({ name, population, id }) => ({ name, population: population || null, id })).sort((a, b) => a.population > b.population ? -1 : 1);
   return new Response(JSON.stringify(populations));
 }
-
-// ../.wrangler/tmp/pages-uiXvHD/functionsRoutes-0.05199953790935474.mjs
 var routes = [
   {
     routePath: "/api/capitals",
@@ -58,8 +77,6 @@ var routes = [
     modules: [onRequestGet2]
   }
 ];
-
-// ../node_modules/path-to-regexp/dist.es2015/index.js
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -357,8 +374,6 @@ function pathToRegexp(path, keys, options) {
     return arrayToRegexp(path, keys, options);
   return stringToRegexp(path, keys, options);
 }
-
-// ../node_modules/wrangler/templates/pages-template-worker.ts
 var escapeRegex = /[.+?^${}()|[\]\\]/g;
 function* executeRequest(request) {
   const requestPath = new URL(request.url).pathname;
@@ -476,8 +491,6 @@ var cloneResponse = (response) => (
     response
   )
 );
-
-// ../node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
 var drainBody = async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -495,8 +508,6 @@ var drainBody = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_ensure_req_body_drained_default = drainBody;
 var wrap = void 0;
-
-// ../node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
 function reduceError(e) {
   return {
     name: e?.name,
@@ -518,8 +529,6 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_miniflare3_json_error_default = jsonError;
 var wrap2 = void 0;
-
-// ../.wrangler/tmp/bundle-n3or3J/middleware-insertion-facade.js
 var envWrappers = [wrap, wrap2].filter(Boolean);
 var facade = {
   ...pages_template_worker_default,
@@ -531,8 +540,6 @@ var facade = {
   ].filter(Boolean)
 };
 var middleware_insertion_facade_default = facade;
-
-// ../node_modules/wrangler/templates/middleware/common.ts
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -553,8 +560,6 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
     finalMiddleware
   ]);
 }
-
-// ../.wrangler/tmp/bundle-n3or3J/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -639,7 +644,170 @@ function maskHandlerEnv(handler) {
   return (data, env, ctx) => handler(data, getMaskedEnv(env), ctx);
 }
 var middleware_loader_entry_default = facade2;
-export {
-  middleware_loader_entry_default as default
+
+// node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
+var drainBody2 = async (request, env, _ctx, middlewareCtx) => {
+  try {
+    return await middlewareCtx.next(request, env);
+  } finally {
+    try {
+      if (request.body !== null && !request.bodyUsed) {
+        const reader = request.body.getReader();
+        while (!(await reader.read()).done) {
+        }
+      }
+    } catch (e) {
+      console.error("Failed to drain the unused request body.", e);
+    }
+  }
 };
-//# sourceMappingURL=functionsWorker-0.32259133659955386.mjs.map
+var middleware_ensure_req_body_drained_default2 = drainBody2;
+var wrap3 = void 0;
+
+// node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
+function reduceError2(e) {
+  return {
+    name: e?.name,
+    message: e?.message ?? String(e),
+    stack: e?.stack,
+    cause: e?.cause === void 0 ? void 0 : reduceError2(e.cause)
+  };
+}
+var jsonError2 = async (request, env, _ctx, middlewareCtx) => {
+  try {
+    return await middlewareCtx.next(request, env);
+  } catch (e) {
+    const error = reduceError2(e);
+    return Response.json(error, {
+      status: 500,
+      headers: { "MF-Experimental-Error-Stack": "true" }
+    });
+  }
+};
+var middleware_miniflare3_json_error_default2 = jsonError2;
+var wrap4 = void 0;
+
+// .wrangler/tmp/bundle-2c3SRu/middleware-insertion-facade.js
+var envWrappers2 = [wrap3, wrap4].filter(Boolean);
+var facade3 = {
+  ...middleware_loader_entry_default,
+  envWrappers: envWrappers2,
+  middleware: [
+    middleware_ensure_req_body_drained_default2,
+    middleware_miniflare3_json_error_default2,
+    ...middleware_loader_entry_default.middleware ? middleware_loader_entry_default.middleware : []
+  ].filter(Boolean)
+};
+var middleware_insertion_facade_default2 = facade3;
+
+// node_modules/wrangler/templates/middleware/common.ts
+var __facade_middleware__2 = [];
+function __facade_register__2(...args) {
+  __facade_middleware__2.push(...args.flat());
+}
+function __facade_invokeChain__2(request, env, ctx, dispatch, middlewareChain) {
+  const [head, ...tail] = middlewareChain;
+  const middlewareCtx = {
+    dispatch,
+    next(newRequest, newEnv) {
+      return __facade_invokeChain__2(newRequest, newEnv, ctx, dispatch, tail);
+    }
+  };
+  return head(request, env, ctx, middlewareCtx);
+}
+function __facade_invoke__2(request, env, ctx, dispatch, finalMiddleware) {
+  return __facade_invokeChain__2(request, env, ctx, dispatch, [
+    ...__facade_middleware__2,
+    finalMiddleware
+  ]);
+}
+
+// .wrangler/tmp/bundle-2c3SRu/middleware-loader.entry.ts
+var __Facade_ScheduledController__2 = class {
+  constructor(scheduledTime, cron, noRetry) {
+    this.scheduledTime = scheduledTime;
+    this.cron = cron;
+    this.#noRetry = noRetry;
+  }
+  #noRetry;
+  noRetry() {
+    if (!(this instanceof __Facade_ScheduledController__2)) {
+      throw new TypeError("Illegal invocation");
+    }
+    this.#noRetry();
+  }
+};
+var __facade_modules_fetch__2 = function(request, env, ctx) {
+  if (middleware_insertion_facade_default2.fetch === void 0)
+    throw new Error("Handler does not export a fetch() function.");
+  return middleware_insertion_facade_default2.fetch(request, env, ctx);
+};
+function getMaskedEnv2(rawEnv) {
+  let env = rawEnv;
+  if (middleware_insertion_facade_default2.envWrappers && middleware_insertion_facade_default2.envWrappers.length > 0) {
+    for (const wrapFn of middleware_insertion_facade_default2.envWrappers) {
+      env = wrapFn(env);
+    }
+  }
+  return env;
+}
+var registeredMiddleware2 = false;
+var facade4 = {
+  ...middleware_insertion_facade_default2.tail && {
+    tail: maskHandlerEnv2(middleware_insertion_facade_default2.tail)
+  },
+  ...middleware_insertion_facade_default2.trace && {
+    trace: maskHandlerEnv2(middleware_insertion_facade_default2.trace)
+  },
+  ...middleware_insertion_facade_default2.scheduled && {
+    scheduled: maskHandlerEnv2(middleware_insertion_facade_default2.scheduled)
+  },
+  ...middleware_insertion_facade_default2.queue && {
+    queue: maskHandlerEnv2(middleware_insertion_facade_default2.queue)
+  },
+  ...middleware_insertion_facade_default2.test && {
+    test: maskHandlerEnv2(middleware_insertion_facade_default2.test)
+  },
+  ...middleware_insertion_facade_default2.email && {
+    email: maskHandlerEnv2(middleware_insertion_facade_default2.email)
+  },
+  fetch(request, rawEnv, ctx) {
+    const env = getMaskedEnv2(rawEnv);
+    if (middleware_insertion_facade_default2.middleware && middleware_insertion_facade_default2.middleware.length > 0) {
+      if (!registeredMiddleware2) {
+        registeredMiddleware2 = true;
+        for (const middleware of middleware_insertion_facade_default2.middleware) {
+          __facade_register__2(middleware);
+        }
+      }
+      const __facade_modules_dispatch__ = function(type, init) {
+        if (type === "scheduled" && middleware_insertion_facade_default2.scheduled !== void 0) {
+          const controller = new __Facade_ScheduledController__2(
+            Date.now(),
+            init.cron ?? "",
+            () => {
+            }
+          );
+          return middleware_insertion_facade_default2.scheduled(controller, env, ctx);
+        }
+      };
+      return __facade_invoke__2(
+        request,
+        env,
+        ctx,
+        __facade_modules_dispatch__,
+        __facade_modules_fetch__2
+      );
+    } else {
+      return __facade_modules_fetch__2(request, env, ctx);
+    }
+  }
+};
+function maskHandlerEnv2(handler) {
+  return (data, env, ctx) => handler(data, getMaskedEnv2(env), ctx);
+}
+var middleware_loader_entry_default2 = facade4;
+export {
+  middleware_loader_entry_default2 as default
+};
+//# sourceMappingURL=functionsWorker-0.22883317277102666.js.map

@@ -4,7 +4,7 @@
 // // through wrangler, or we can potentially let users directly add them as a sort
 // // of "plugin" system.
 
-import worker from "/Users/nilemiller/Documents/code/pages-functions-countries-demo/.wrangler/tmp/bundle-n3or3J/middleware-insertion-facade.js";
+import worker from "/Users/nilemiller/Documents/code/pages-functions-countries-demo/.wrangler/tmp/bundle-2c3SRu/middleware-insertion-facade.js";
 import {
 	__facade_invoke__,
 	__facade_register__,
@@ -13,7 +13,7 @@ import {
 } from "/Users/nilemiller/Documents/code/pages-functions-countries-demo/node_modules/wrangler/templates/middleware/common.ts";
 
 // We need to preserve all of the exports from the worker
-export * from "/Users/nilemiller/Documents/code/pages-functions-countries-demo/.wrangler/tmp/bundle-n3or3J/middleware-insertion-facade.js";
+export * from "/Users/nilemiller/Documents/code/pages-functions-countries-demo/.wrangler/tmp/bundle-2c3SRu/middleware-insertion-facade.js";
 
 class __Facade_ScheduledController__ implements ScheduledController {
 	#noRetry: ScheduledController["noRetry"];
