@@ -1,4 +1,4 @@
-
+ 
 > [!NOTE]
 > View the deployed example [here](https://pages-functions-countries-demo.pages.dev/). The description below does not go into detail as to how the front end code works; it focuses on the process of creating API endpoints. 
 
@@ -46,10 +46,10 @@ Let's look at `functions/api/capitals.ts`. Suppose we want to create an endpoint
 ```javascript
 export async function onRequestGet({ env }) {
 
-  const { API_ENDPOINT: url } = env;
-  const res = await fetch(url);
+  const { API_ENDPOINT: url } = env;  // the environment variable API_ENDPOINT from .dev.vars 
+  const res = await fetch(url); 
   const countries = await res.json();
-  const capitals = countries.map(({ name, capital, id }) => ({ name, capital, id }));
+  const capitals = countries.map(({ name, capital, id }) => ({ name, capital, id })); // a new array with just the name, capital, and id of each country
 
   return new Response(JSON.stringify(capitals));
 }
@@ -74,8 +74,7 @@ Success! We repeat a similar pattern for `populations.ts`, except this time we p
 
 # 3. What's the Point?
 
-We could have just called the Countries API from the front-end and then pulled out the properties we needed without the overhead of setting up serverless API endpoints
-Correct. But imagine that instead of accessing a publicly available API, we needed to return data from a database or private API that required credentials to access. If we made the call from the front end, the credentials would be visible to anyone accessing our app via the Network tab in DevTools. By moving the call to the Countries API to the backend, we ensure that the only thing the user can access is the filtered, "curated" version of the data. They have no access to the underlying Countries API. 
+We could have just called the Countries API from the front-end and then pulled out the properties we needed without the overhead of setting up serverless API endpoints, right? Yes, that's correct. But imagine that instead of accessing a publicly available API, we needed to return data from a database or private API that required credentials to access. If we made the call from the front end, the credentials would be visible to anyone accessing our app via the Network tab in DevTools. By moving the call to the Countries API to the backend (i.e., the Cloudflare network), we ensure that the only thing the user can access is the filtered, "curated" version of the data. They have no access to the underlying Countries API. 
 
 Or if that's not convincing, imagine that each call to the Countries API returned 300MB worth of data - for example, let's say that a single object contained demographic information about every single administrative region of the country and its geometric information. If we only need a tiny subset of that data in the front end of our app, it would not make sense to burden the user's browser with such a huge network request. 
 
